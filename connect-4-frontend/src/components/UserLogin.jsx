@@ -1,38 +1,34 @@
-// src/components/UserForm.js
-import React, { useState } from 'react';
+// src/components/UserLogin.js
+// Component for user login form.
 
+import React, { useState } from 'react';
+import axios from 'axios';
+
+// UserLogin component displays a login form for users.
 const UserLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Handles changes in the username input field.
   const handleUsername = (e) => {
     setUsername(e.target.value)
   };
 
+  // Handles changes in the password input field.
   const handlePassword = (e) => {
     setPassword(e.target.value)
   };
 
+  // Handles form submission.
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      if (response.ok) {
-        console.log('User added successfully');
-        setUsername('');
-        setPassword('');
-      } else {
-        console.error('Failed to add user');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    axios.post('http://localhost:3000', {username, password})
+    .then((response) => {
+        console.log(response)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
   };
 
   return (
