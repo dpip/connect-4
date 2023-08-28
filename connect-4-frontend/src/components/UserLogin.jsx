@@ -4,12 +4,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useGlobalState } from './../context/GlobalStateContext';
+import { useNavigate} from 'react-router-dom';
 
 // UserLogin component displays a login form for users.
 const UserLogin = () => {
   const { state, dispatch } = useGlobalState();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); 
+
 
   // Handles changes in the username input field.
   const handleUsername = (e) => {
@@ -21,15 +24,15 @@ const UserLogin = () => {
     setPassword(e.target.value)
   };
 
-  const user = state.username;
-
   // Handles form submission.
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios.post('http://localhost:3000', {username, password})
     .then((response) => {
         console.log(response) 
-        dispatch({type: 'UPDATE_USER', payload: username})
+        const updatedUsername = response.data.username;
+        dispatch({type: 'UPDATE_USERNAME', payload: updatedUsername})
+        navigate('/welcome');
     })
     .catch((error) => {
         console.log(error)
@@ -38,6 +41,7 @@ const UserLogin = () => {
 
   return (
     <div>
+      <h1>Welcome to Pip's Connect Four Game!</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username:</label>

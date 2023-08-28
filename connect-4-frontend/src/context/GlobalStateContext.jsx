@@ -3,13 +3,17 @@ import React, { createContext, useContext, useReducer } from 'react';
 // Initial state
 const initialState = {
   // Initial global state properties
-  username: 'Daniel'
+  username: ''
 };
 
 // Reducer handles state changes
 function reducer(state, action) {
   switch (action.type) {
-    // Define different action types
+    case 'UPDATE_USERNAME':
+        return {
+            ...state, 
+            username: action.payload
+        } 
     default:
       return state;
   }
