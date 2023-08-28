@@ -11,11 +11,8 @@ const App = (props) => {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<UserLogin globalState={state} />} />
-        <Route
-          path="/welcome"
-          element={<WelcomePage globalState={state} />}
-        />
+        <Route path="/" element={<UserLogin />} />
+        <Route path="/welcome" element={<WelcomePage />} />
       </Routes>
     </div>
   );
