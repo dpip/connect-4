@@ -3,9 +3,11 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useGlobalState } from './../context/GlobalStateContext';
 
 // UserLogin component displays a login form for users.
 const UserLogin = () => {
+  const { state, dispatch } = useGlobalState();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,12 +21,15 @@ const UserLogin = () => {
     setPassword(e.target.value)
   };
 
+  const user = state.username;
+
   // Handles form submission.
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios.post('http://localhost:3000', {username, password})
     .then((response) => {
-        console.log(response)
+        console.log(response) 
+        dispatch({type: 'UPDATE_USER', payload: username})
     })
     .catch((error) => {
         console.log(error)
