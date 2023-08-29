@@ -4,7 +4,7 @@ import { useGlobalState } from './../context/GlobalStateContext';
 
 const boardSettings = {
     rows: 8,
-    columns: 100,
+    columns: 10,
     dropAnimationRate: 50,
     flashAnimationRate: 600,
     colors: {
@@ -98,7 +98,9 @@ async function handleDrop(column) {
   // Check for win
 
   setCurrentPlayer(
-    // missing code
+    currentPlayer === boardSettings.colors.p1 ? 
+    boardSettings.colors.p2 :
+    boardSettings.colors.p1
   );
 }
   
@@ -168,6 +170,7 @@ async function handleDrop(column) {
         return (
           isForwardsDiagonalWin() ||
           isBackwardsDiagonalWin() ||
+          isVerticalWin() ||
           isHorizontalWin() ||
           null
         );
@@ -201,6 +204,30 @@ async function handleDrop(column) {
           }
         }
       }
+
+      function isVerticalWin() {
+        const { rows } = boardSettings;
+        const { columns } = boardSettings;
+        const { empty } = boardSettings.colors;
+        
+        for (let column = 0; column < columns; column++) {
+          for (let row = 0; row <= rows - 4; row++) {
+            let start = getIndex(row, column);
+            if (board[start] === empty) continue;
+            
+            let counter = 1;
+            for (let k = row + 1; k < row + 4; k++) {
+              if (board[getIndex(k, column)] === board[start]) {
+                counter++;
+                if (counter === 4) {
+                  return createWinState(start, winTypes.vertical);
+                }
+              }
+            }
+          }
+        }
+      }
+
       function isHorizontalWin() {
         const { rows } = boardSettings;
         const { columns } = boardSettings;
@@ -299,7 +326,6 @@ async function handleDrop(column) {
 
     return (
 
-
 <>
                     <h1>Welcome to the game, {state.username}!</h1>
 
@@ -319,7 +345,7 @@ async function handleDrop(column) {
         <div><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
         <br></br><br></br><br></br><br></br><br></br>
         <h2 style={{ color: currentPlayer }}>
-          {currentPlayer === boardSettings.colors.p1 ? `${props.username}'s move` : "Player 2's move"}
+          {currentPlayer === boardSettings.colors.p1 ? `${state.username}'s move` : "Player 2's move"}
         </h2></div>
       )}
       {win && (
@@ -329,7 +355,7 @@ async function handleDrop(column) {
           <h1 style={{ color: win.winner }}>
             {" "}
             {win.winner === boardSettings.colors.p1
-              ? `${props.username}`
+              ? `${state.username}`
               : "Player 2"}{" "}
             WON!
           </h1>

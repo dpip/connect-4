@@ -8,7 +8,7 @@ import { useNavigate} from 'react-router-dom';
 
 // UserLogin component displays a login form for users.
 const UserLogin = () => {
-  const { state, dispatch } = useGlobalState();
+  const { dispatch } = useGlobalState();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); 
